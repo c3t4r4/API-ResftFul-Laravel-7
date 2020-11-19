@@ -24,7 +24,7 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => (!empty($this->segment(3)) ? "required|min:3|max:50|unique:categories,name,{$this->segment(3)},id" : "required|min:3|max:50|unique:categories")
+            'name' => (!empty($this->segment(3)) ? "required|min:3|max:50|unique:categories,name,{$this->segment(3)},id" : "required|min:3|max:50|unique:categories,name")
         ];
     }
 }
