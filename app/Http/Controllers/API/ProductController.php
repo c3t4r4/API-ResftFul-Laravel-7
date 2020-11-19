@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -25,6 +26,11 @@ class ProductController extends Controller
 
         if(!$product->save()){
             return response()->json(['error' => 'Not found'], 404);
+        }
+
+        if($request->hasFile('image') && $request->file('image')->isValid()){
+            $product->image = url($request->image->store("products/{$product->id}/"));
+            $product->save();
         }
 
         return response()->json($product, 201);
@@ -50,6 +56,11 @@ class ProductController extends Controller
             if (!$product->save()) {
                 return response()->json(['error' => 'Not found'], 404);
             }
+
+            if($request->hasFile('image') && $request->file('image')->isValid()){
+                $product->image = url($request->image->store("products/{$product->id}/"));
+                $product->save();
+            }
         }
 
         return response()->json($product);
@@ -59,6 +70,10 @@ class ProductController extends Controller
     {
         $product = Product::find($product);
         if(!empty($product)) {
+            if(Storage::exists("products/{$product->id}")){
+                Storage::deleteDirectory("products/{$product->id}");
+            }
+
             $product->delete();
             return response()->json(['success' => 'register has been deleted'], 200);
         }
