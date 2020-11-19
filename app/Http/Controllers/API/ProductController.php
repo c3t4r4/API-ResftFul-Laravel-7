@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         $product = new Product;
         $product->fill($request->all());
@@ -40,7 +41,7 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function update(Request $request, $product)
+    public function update(ProductRequest $request, $product)
     {
         $product = Product::find($product);
         if(!empty($product)) {
