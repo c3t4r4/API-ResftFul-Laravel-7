@@ -51,6 +51,7 @@ class ProductController extends Controller
     {
         $product = Product::find($product);
         if(!empty($product)) {
+            $oldImage = $product->image;
             $product->fill($request->all());
 
             if (!$product->save()) {
@@ -58,6 +59,11 @@ class ProductController extends Controller
             }
 
             if($request->hasFile('image') && $request->file('image')->isValid()){
+
+                if(!empty($oldImage) && Storage::exists("products/{$product->id}/{$oldImage}")){
+                    Storage::delete("products/{$product->id}/{$oldImage}");
+                }
+
                 $product->image = url($request->image->store("products/{$product->id}/"));
                 $product->save();
             }
