@@ -25,6 +25,7 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => (!empty($this->segment(3)) ? "required|min:3|max:50|unique:products,name,{$this->segment(3)},id" : "required|min:3|max:50|unique:products,name"),
+            'description' => 'max:1000',
             'image' => 'image',
             'category_id' => 'required|exists:categories,id'
         ];
