@@ -11,4 +11,13 @@ class Product extends Model
         'description',
         'image',
     ];
+
+    public function scopeGetResults($query, $name = null)
+    {
+        if(!empty($name)){
+            return $query->where('name', 'LIKE', "%{$name}%")->get();
+        }
+
+        return $query->get();
+    }
 }
