@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use \Illuminate\Support\Facades\DB;
+use \App\Models\Product;
 
 class ProductsSeeder extends Seeder
 {
@@ -12,10 +12,6 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('products')->insert([
-            'name' => 'Glauco Garcia Cetara',
-            'email' => 'neocetara@hotmail.com',
-            '' => bcrypt('1234')
-        ]);
+        factory(Product::class, 50)->create();
     }
 }
