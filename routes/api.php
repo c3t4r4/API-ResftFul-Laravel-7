@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::apiResource('/categories', 'API\CategoryController');
+Route::group(['prefix' => 'v1', 'namespace' => 'API\v1'], function() {
+    Route::get('/categories/{category}/products', 'CategoryController@products')->name('categories.products');
+    Route::apiResource('/categories', 'CategoryController');
 
-Route::apiResource('/products', 'API\ProductController');
+    Route::get('/products/{product}/category', 'ProductController@category')->name('products.category');
+    Route::apiResource('/products', 'ProductController');
+});

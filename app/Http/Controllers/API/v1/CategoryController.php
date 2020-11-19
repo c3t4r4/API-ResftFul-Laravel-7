@@ -1,19 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function products()
-    {
-        //return BelongsToMany::();
-    }
+    private $TotalperPage = 10;
 
     public function index(Request $request)
     {
@@ -68,5 +64,19 @@ class CategoryController extends Controller
         }
 
         return response()->json(['error' => 'Not found'], 404);
+    }
+
+    public function products($category)
+    {
+        $category = Category::find($category);
+
+        if(empty($category)) {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+
+        return response()->json([
+            'category' => $category,
+            'products' =>$category->products()->paginate($this->TotalperPage)
+        ]);
     }
 }

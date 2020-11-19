@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
@@ -38,7 +38,7 @@ class ProductController extends Controller
 
     public function show($product)
     {
-        $product = Product::find($product);
+        $product = Product::with('category')->find($product);
 
         if(empty($product)) {
             return response()->json(['error' => 'Not found'], 404);
@@ -60,11 +60,11 @@ class ProductController extends Controller
 
             if($request->hasFile('image') && $request->file('image')->isValid()){
 
-                if(!empty($oldImage) && Storage::exists("products/{$product->id}/{$oldImage}")){
-                    Storage::delete("products/{$product->id}/{$oldImage}");
+                if(!empty($oldImage) && Storage::exists($oldImage)){
+                    Storage::delete($oldImage);
                 }
 
-                $product->image = url($request->image->store("products/{$product->id}/"));
+                $product->image = $request->image->store("products/{$product->id}/");
                 $product->save();
             }
         }
@@ -76,6 +76,7 @@ class ProductController extends Controller
     {
         $product = Product::find($product);
         if(!empty($product)) {
+
             if(Storage::exists("products/{$product->id}")){
                 Storage::deleteDirectory("products/{$product->id}");
             }
@@ -85,5 +86,16 @@ class ProductController extends Controller
         }
 
         return response()->json(['error' => 'Not found'], 404);
+    }
+
+    public function category($product)
+    {
+        $product = Product::find($product);
+
+        if(empty($product)) {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+
+        return response()->json($product->category);
     }
 }
