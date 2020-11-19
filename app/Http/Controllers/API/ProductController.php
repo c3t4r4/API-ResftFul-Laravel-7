@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    private $TotalperPage = 10;
+
     public function index(Request $request)
     {
-        $products = Product::getResults($request->name);
+        $products = Product::getResults($request->all(), $this->TotalperPage);
 
         return response()->json($products);
     }
