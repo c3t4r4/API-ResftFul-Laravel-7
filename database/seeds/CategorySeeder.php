@@ -24,7 +24,7 @@ class CategorySeeder extends Seeder
                 'updated_at' => now()
             ],
             [
-                'name' => 'Teste',
+                'name' => 'Games',
                 'created_at' => now(),
                 'updated_at' => now()
             ]
