@@ -13,6 +13,14 @@ class Product extends Model
         'category_id'
     ];
 
+    /** Relationships */
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    /** Scopes */
+
     public function scopeGetResults($query, $data = null, $total = 10)
     {
         if(empty($data['filter']) && empty($data['name']) && empty($data['description'])){
@@ -20,11 +28,11 @@ class Product extends Model
         }
 
         return $query->where(function ($row) use ($data) {
-           if(!empty($data['filter'])){
-               $filter = $data['filter'];
-               $row->where('name', $data['filter']);
-               $row->orWhere('description', 'LIKE', "%{$filter}%");
-           }
+            if(!empty($data['filter'])){
+                $filter = $data['filter'];
+                $row->where('name', $data['filter']);
+                $row->orWhere('description', 'LIKE', "%{$filter}%");
+            }
 
             if(!empty($data['name'])){
                 $row->where('name', $data['name']);
@@ -36,4 +44,8 @@ class Product extends Model
             }
         })->paginate($total);
     }
+
+    /** Attributes */
+
+    /** Functions */
 }
